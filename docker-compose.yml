@@ -3,13 +3,22 @@ version: "3.3"
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:3000
     volumes:
       - .:/code
     ports:
-      - 8000:8000
+      - 3000:3000
     depends_on:
       - db
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'python consumer.py'
+    depends_on:
+      - db
+
   db:
     image: postgres:13
     environment:
